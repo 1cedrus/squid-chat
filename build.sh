@@ -1,0 +1,1 @@
+pop build --path ./contracts
