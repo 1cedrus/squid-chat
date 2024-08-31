@@ -1,1 +1,1 @@
-pop up contract --path ./contracts --constructor new --suri //Alice
+pop up contract --path ./contract --constructor new --suri //Alice

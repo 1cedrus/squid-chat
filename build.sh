@@ -1,1 +1,1 @@
-pop build --path ./contracts
+pop build --path ./contract

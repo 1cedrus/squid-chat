@@ -6,13 +6,13 @@ mod types;
 mod macros;
 
 pub use errors::SquidChatError;
-pub use events::{ ChannelCreated, MessageSent, MessageDeleted };
+pub use events::{ ChannelCreated, MessageSent, MessageDeleted, MemberLeft, MemberJoined };
 pub use types::{ Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Request, RequestApproval, RequestId, RequestRecord, ApprovalSubmissionResult, Pagination };
 
 #[ink::contract]
 mod squidchat {
   use core::usize;
-  use crate::{ ensure, ApprovalSubmissionResult, SquidChatError, Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Pagination, Request, RequestApproval, RequestId, RequestRecord, MessageSent, ChannelCreated, MessageDeleted };
+  use crate::{ ensure, ApprovalSubmissionResult, SquidChatError, Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Pagination, Request, RequestApproval, RequestId, RequestRecord, MessageSent, ChannelCreated, MessageDeleted, MemberJoined, MemberLeft };
 
   use ink::prelude::string::String;
   use ink::prelude::vec::Vec;
@@ -45,6 +45,20 @@ mod squidchat {
     }
 
     #[ink(message)]
+    pub fn pending_requests_count(&self, channel_id: ChannelId) -> SquidChatResult<u32> {
+      self._ensure_channel_exists(channel_id)?;
+
+      Ok(self.pending_requests.get(channel_id).unwrap_or_default().len() as u32)
+    }
+
+    #[ink(message)]
+    pub fn message_nonce(&self, channel_id: ChannelId) -> SquidChatResult<u32> {
+      self._ensure_channel_exists(channel_id)?;
+
+      Ok(self.message_nonce.get(channel_id).unwrap_or_default())
+    }
+
+    #[ink(message)]
     pub fn get_channel_members(&self, channel_id: ChannelId) -> SquidChatResult<Vec<AccountId>> {
       self._ensure_channel_exists(channel_id)?;
 
@@ -52,8 +66,11 @@ mod squidchat {
     }
 
     #[ink(message)]
-    pub fn get_member_channels(&self, who: AccountId) -> Vec<ChannelId> {
-      self.member_to_channels.get(who).unwrap_or_default()
+    pub fn get_member_channels(&self, who: AccountId) -> Vec<ChannelRecord> {
+      self.member_to_channels.get(who).unwrap_or_default().iter().map(|&channel_id| ChannelRecord {
+        channel_id,
+        channel: self.channels.get(channel_id).unwrap()
+      }).collect()
     }
 
     #[ink(message)]
@@ -367,6 +384,11 @@ mod squidchat {
       self.member_to_channels.insert(who, &member_channels);
       self.channel_to_members.insert(channel_id, &members);
 
+      self.env().emit_event(MemberLeft {
+        channel_id,
+        account_id: who,
+      });
+
       Ok(())
     }
 
@@ -386,6 +408,11 @@ mod squidchat {
 
       self.member_to_channels.insert(who, &member_channels);
       self.channel_to_members.insert(channel_id, &members);
+
+      self.env().emit_event(MemberJoined {
+        channel_id,
+        account_id: who,
+      });
 
       Ok(())
     }
