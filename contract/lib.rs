@@ -6,13 +6,13 @@ mod types;
 mod macros;
 
 pub use errors::SquidChatError;
-pub use events::{ ChannelCreated, MessageSent, MessageDeleted, MemberLeft, MemberJoined };
-pub use types::{ Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Request, RequestApproval, RequestId, RequestRecord, ApprovalSubmissionResult, Pagination };
+pub use events::{ ChannelCreated, MessageSent, MessageDeleted, MemberLeft, ApprovalSubmitted, RequestSent, RequestCancelled, ChannelUpdated };
+pub use types::{ Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Request, RequestApproval, RequestId, ApprovalSubmissionResult, Pagination, PendingRequestRecord };
 
 #[ink::contract]
 mod squidchat {
   use core::usize;
-  use crate::{ ensure, ApprovalSubmissionResult, SquidChatError, Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Pagination, Request, RequestApproval, RequestId, RequestRecord, MessageSent, ChannelCreated, MessageDeleted, MemberJoined, MemberLeft };
+  use crate::{ ensure, ApprovalSubmissionResult, SquidChatError, Channel, ChannelId, ChannelRecord, Message, MessageId, MessageRecord, Pagination, Request, RequestApproval, RequestId, MessageSent, ChannelCreated, MessageDeleted, ApprovalSubmitted, MemberLeft, PendingRequestRecord, RequestCancelled, RequestSent, ChannelUpdated }; 
 
   use ink::prelude::string::String;
   use ink::prelude::vec::Vec;
@@ -45,6 +45,25 @@ mod squidchat {
     }
 
     #[ink(message)]
+    pub fn pending_request_for(&self, who: Option<AccountId>, channel_ids: Vec<ChannelId>) -> Vec<PendingRequestRecord> {
+      let who = who.unwrap_or(self.env().caller());
+      let mut pending_requests: Vec<PendingRequestRecord> = Vec::new();
+
+      for channel_id in channel_ids {
+        if let Some((request_id, request)) = self._get_pending_request(who, channel_id) {
+          pending_requests.push(PendingRequestRecord {
+            channel_id,
+            request_id,
+            request,
+          });
+        }
+      }
+
+      pending_requests
+    }
+
+  
+    #[ink(message)]
     pub fn pending_requests_count(&self, channel_id: ChannelId) -> SquidChatResult<u32> {
       self._ensure_channel_exists(channel_id)?;
 
@@ -52,7 +71,7 @@ mod squidchat {
     }
 
     #[ink(message)]
-    pub fn message_nonce(&self, channel_id: ChannelId) -> SquidChatResult<u32> {
+    pub fn message_count(&self, channel_id: ChannelId) -> SquidChatResult<u32> {
       self._ensure_channel_exists(channel_id)?;
 
       Ok(self.message_nonce.get(channel_id).unwrap_or_default())
@@ -119,6 +138,7 @@ mod squidchat {
 
       self.env().emit_event(ChannelCreated {
         channel_id,
+        owner: sender,
       });
 
       Ok(channel_id)
@@ -126,7 +146,7 @@ mod squidchat {
 
     #[ink(message)]
     pub fn update_channel(&mut self, channel_id: ChannelId, name: String, img_url: Option<String>) -> SquidChatResult<()> {
-      ensure!(self.channels.contains(channel_id), SquidChatError::Custom(String::from("ChannelNotExists")));
+      ensure!(self.channels.contains(channel_id), SquidChatError::Custom(String::from("Channel not found!")));
 
       let sender = self.env().caller();
       let mut channel = self.channels.get(channel_id).unwrap();
@@ -135,6 +155,10 @@ mod squidchat {
       channel.update(name, img_url);
 
       self.channels.insert(channel_id, &channel);
+      self.env().emit_event(ChannelUpdated {
+        channel_id,
+        owner: sender,
+      });
 
       Ok(())
     }
@@ -159,7 +183,7 @@ mod squidchat {
     }
 
     #[ink(message)]
-    pub fn list_pending_requests(&self, channel_id: ChannelId, from: u32, per_page: u32) -> Pagination<RequestRecord> {
+    pub fn list_pending_requests(&self, channel_id: ChannelId, from: u32, per_page: u32 ) -> Pagination<Request> {
       let pending_requests = self.pending_requests.get(channel_id).unwrap_or_default();
       let per_page = per_page.min(50);
       let last_position = from.saturating_add(per_page);
@@ -168,12 +192,9 @@ mod squidchat {
 
       let requests: Option<&[RequestId]> = pending_requests.get(from as usize..last_position.min(total) as usize);
       let items = match requests {
-        Some(requests) => requests.iter().map(|&request_id| {
-          RequestRecord {
-            request_id,
-            request: self.requests.get(request_id).unwrap()
-          }
-        }).collect(),
+        Some(requests) => requests.iter().map(|&request_id| 
+             self.requests.get(request_id).unwrap()
+        ).collect(),
         None => Vec::new(),
       };
 
@@ -187,19 +208,34 @@ mod squidchat {
     }
 
     #[ink(message)]
+    pub fn cancel_request(&mut self, channel_id: ChannelId) -> SquidChatResult<()> {
+      let sender = self.env().caller();
+      let _channel = self._ensure_channel_exists(channel_id)?;
+
+      if let Some((request_id, _request)) = self._get_pending_request(sender, channel_id) {
+        let mut pending_requests = self.pending_requests.get(channel_id).unwrap_or_default();
+        pending_requests.retain(|x| *x != request_id);
+
+        self.pending_requests.insert(channel_id, &pending_requests);
+      } else {
+        return Err(SquidChatError::Custom(String::from("There is no pending request in this channel found for this specific account!")));
+      }
+
+      self.env().emit_event(RequestCancelled {
+        channel_id,
+        sender,
+      });
+
+      Ok(())
+    }
+
+    #[ink(message)]
     pub fn send_request(&mut self, channel_id: ChannelId) -> SquidChatResult<RequestId> {
       let sender = self.env().caller();
       let _channel = self._ensure_channel_exists(channel_id)?;
 
       ensure!(!self._is_member(None, channel_id)?, SquidChatError::Custom(String::from("The sender is already a member of the channel!")));
-
-      let maybe_request_id = self.registrant_to_request.get((sender, channel_id));
-      if let Some(request_id) = maybe_request_id {
-        ensure!(
-          !self.pending_requests.get(channel_id).unwrap_or_default().contains(&request_id),
-          SquidChatError::Custom(String::from("The registrant is already having a pending request!"))
-          );
-      }
+      ensure!(self._get_pending_request(sender, channel_id).is_none(), SquidChatError::Custom(String::from("The registrant is already having a pending request!")));
 
       let request = Request {
         sender,
@@ -220,6 +256,11 @@ mod squidchat {
       self.pending_requests.insert(channel_id, &pending_requests);
       self.request_nonce.set(&next_request_id);
 
+      self.env().emit_event(RequestSent {
+        channel_id,
+        sender,
+      });
+
       Ok(request_id)
     }
 
@@ -228,8 +269,8 @@ mod squidchat {
       let channel = self._ensure_channel_exists(channel_id)?;
       ensure!(channel.is_owner(Self::env().caller()), SquidChatError::UnAuthorized);
 
-      let mut approved_count: u32 = 0;
-      let mut rejected_count: u32 = 0;
+      let mut approved_requests: Vec<RequestId> = Vec::new();
+      let mut rejected_requests: Vec<RequestId> = Vec::new();
       let mut not_found_count: u32 = 0;
 
       let mut submitted_request_ids: Vec<RequestId> = Vec::new();
@@ -242,9 +283,9 @@ mod squidchat {
             // Add member & update request  
             self._add_member(who, channel_id)?;
 
-            approved_count = approved_count.saturating_add(1);
+            approved_requests.push(request_id);
           } else {
-            rejected_count = rejected_count.saturating_add(1);
+            rejected_requests.push(request_id);
           }
 
           request.approval = Some(approved);
@@ -259,10 +300,16 @@ mod squidchat {
       pending_requests.retain(|x| !submitted_request_ids.contains(x));
 
       self.pending_requests.insert(channel_id, &pending_requests);
+  
+      self.env().emit_event(ApprovalSubmitted {
+        channel_id,
+        approved: approved_requests.clone(),
+        rejected: rejected_requests.clone(),
+      });
 
       Ok(ApprovalSubmissionResult {
-        approved: approved_count,
-        rejected: rejected_count,
+        approved: approved_requests.len() as u32,
+        rejected: rejected_requests.len() as u32,
         not_found: not_found_count,
       })
     }
@@ -275,6 +322,11 @@ mod squidchat {
       let sender = self.env().caller();
       self._remove_member(sender, channel_id)?;
 
+      self.env().emit_event(MemberLeft {
+        channel_id,
+        account_id: sender,
+      });
+
       Ok(())
     }
 
@@ -285,6 +337,11 @@ mod squidchat {
       ensure!(channel.is_owner(caller), SquidChatError::UnAuthorized);
 
       self._remove_member(who, channel_id)?;
+
+      self.env().emit_event(MemberLeft {
+        channel_id,
+        account_id: who,
+      });
 
       Ok(())
     }
@@ -362,7 +419,7 @@ mod squidchat {
     }
 
     pub fn _ensure_channel_exists(&self, channel_id: ChannelId) -> SquidChatResult<Channel> {
-      ensure!(self.channels.contains(channel_id), SquidChatError::Custom(String::from("ChannelNotExists")));
+      ensure!(self.channels.contains(channel_id), SquidChatError::Custom(String::from("Channel not found!")));
 
       Ok(self.channels.get(channel_id).unwrap())
     }
@@ -408,11 +465,6 @@ mod squidchat {
 
       self.member_to_channels.insert(who, &member_channels);
       self.channel_to_members.insert(channel_id, &members);
-
-      self.env().emit_event(MemberJoined {
-        channel_id,
-        account_id: who,
-      });
 
       Ok(())
     }

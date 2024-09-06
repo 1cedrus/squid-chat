@@ -61,12 +61,6 @@ pub struct Request {
   pub requested_at: Timestamp,
 }
 
-#[ink::scale_derive(Encode, Decode, TypeInfo)]
-pub struct RequestRecord {
-  pub request_id: RequestId,
-  pub request: Request,
-}
-
 pub type MessageId = u32;
 
 #[ink::scale_derive(Encode, Decode, TypeInfo)]
@@ -96,3 +90,10 @@ pub struct Pagination<Item> {
 }
 
 pub type Timestamp = u64;
+
+#[ink::scale_derive(Encode, Decode, TypeInfo)]
+pub struct PendingRequestRecord {
+    pub channel_id: ChannelId,
+    pub request_id: RequestId,
+    pub request: Request,
+}
