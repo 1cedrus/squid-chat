@@ -177,8 +177,14 @@ function ChannelBoxInner() {
         <ChannelInfoButton />
       </Flex>
       <Box ref={ref} overflowY="auto" flexGrow={1}>
-        <Flex justify="center" flexDir="column" gap={1} marginY={2}>
-          {isLoading && <CircularProgress isIndeterminate />}
+        <Flex
+          justify="center"
+          flexDir="column"
+          gap={1}
+          marginY={2}
+          align="center"
+        >
+          {isLoading && <CircularProgress isIndeterminate color="gray" />}
           {nonce === 0 && <Center> Not have any messages yet! </Center>}
           {Object.values(renderMessages)?.map(({ sender, sendAt, content }) => (
             <Flex w="full" direction="column" key={sendAt}>

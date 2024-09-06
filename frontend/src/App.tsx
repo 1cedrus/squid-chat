@@ -4,9 +4,10 @@ import MainFooter from "@/components/shared/MainFooter";
 import MainHeader from "@/components/shared/MainHeader";
 import Squid from "./components/squid/Squid";
 import { useTypink } from "./providers/TypinkProvider";
+import SquidProvider from "./providers/SquidProvider";
 
 function App() {
-  const { selectedAccount } = useTypink();
+  const { selectedAccount, ready } = useTypink();
 
   const isConnected = !!selectedAccount;
 
@@ -21,9 +22,17 @@ function App() {
         px={4}
         flex={1}
         w="full"
+        justify="center"
         overflowY="auto"
       >
-        {isConnected ? <Squid /> : <Center>Connect your wallet first!</Center>}
+        {ready &&
+          (isConnected ? (
+            <SquidProvider>
+              <Squid />
+            </SquidProvider>
+          ) : (
+            <Center>Connect your wallet first!</Center>
+          ))}
       </Flex>
       <MainFooter />
     </Flex>
