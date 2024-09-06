@@ -23,6 +23,12 @@ export const squidChatDeployments: ContractDeployment[] = [
     network: NetworkId.POP_TESTNET,
     address: '13uEYiYAnCKDp7S1A99Gc1iaipXAB6D3rzdn7gwQ5fCJenfc',
   },
+  {
+    id: ContractId.SQUIDCHAT,
+    metadata: squidChatMetadata as any,
+    network: NetworkId.ALEPHZERO_TESTNET,
+    address: '5HFkbGoUUVLfgFRq5zZMJdPb8cF78GL3qP5vGXGHqLc9keoQ',
+  },
 ];
 
 export const greeterDeployments: ContractDeployment[] = [
