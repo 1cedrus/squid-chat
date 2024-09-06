@@ -1,0 +1,3528 @@
+{
+  "source": {
+    "hash": "0x44e0201571c69eb2dfbb698b20942800139cb3252833282921098a23f24bdc65",
+    "language": "ink! 5.0.0",
+    "compiler": "rustc 1.76.0-nightly",
+    "build_info": {
+      "rust_toolchain": "nightly-aarch64-apple-darwin",
+      "cargo_contract_version": "4.1.1",
+      "build_mode": "Debug",
+      "wasm_opt_settings": {
+        "optimization_passes": "Z",
+        "keep_debug_symbols": false
+      }
+    }
+  },
+  "contract": {
+    "name": "squidchat",
+    "version": "0.1.0",
+    "authors": [
+      "[1cedrus] <tung@coongcrafts.io>"
+    ]
+  },
+  "image": null,
+  "version": 5,
+  "types": [
+    {
+      "id": 0,
+      "type": {
+        "path": [
+          "ink_primitives",
+          "types",
+          "AccountId"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 1,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 1,
+      "type": {
+        "def": {
+          "array": {
+            "len": 32,
+            "type": 2
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": {
+        "def": {
+          "primitive": "u8"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": {
+        "def": {
+          "primitive": "str"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 5
+          },
+          {
+            "name": "V",
+            "type": 6
+          },
+          {
+            "name": "KeyType",
+            "type": 8
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": {
+        "def": {
+          "primitive": "u32"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Channel"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "owner",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "name",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "img_url",
+                "type": 7,
+                "typeName": "Option<String>"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": {
+        "path": [
+          "Option"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 3
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "None",
+                "index": 0
+              },
+              {
+                "name": "Some",
+                "fields": [
+                  {
+                    "type": 3
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 10
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "AutoKey"
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": {
+        "def": {
+          "tuple": []
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 0
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 5
+          },
+          {
+            "name": "V",
+            "type": 12
+          },
+          {
+            "name": "KeyType",
+            "type": 14
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 15
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 0
+          },
+          {
+            "name": "V",
+            "type": 16
+          },
+          {
+            "name": "KeyType",
+            "type": 18
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 18,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 19
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 19,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 20,
+      "type": {
+        "def": {
+          "primitive": "bool"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": {
+        "def": {
+          "primitive": "u64"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 5
+          },
+          {
+            "name": "V",
+            "type": 23
+          },
+          {
+            "name": "KeyType",
+            "type": 25
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 23,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Request"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "sender",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "channel_id",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "approval",
+                "type": 24,
+                "typeName": "Option<bool>"
+              },
+              {
+                "name": "requested_at",
+                "type": 21,
+                "typeName": "Timestamp"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 24,
+      "type": {
+        "path": [
+          "Option"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 20
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "None",
+                "index": 0
+              },
+              {
+                "name": "Some",
+                "fields": [
+                  {
+                    "type": 20
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 25,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 26
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 26,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 27,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 5
+          },
+          {
+            "name": "V",
+            "type": 16
+          },
+          {
+            "name": "KeyType",
+            "type": 28
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 28,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 29
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 29,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 31
+          },
+          {
+            "name": "V",
+            "type": 5
+          },
+          {
+            "name": "KeyType",
+            "type": 32
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 31,
+      "type": {
+        "def": {
+          "tuple": [
+            0,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "id": 32,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 33
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 33,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 34,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 35
+          },
+          {
+            "name": "V",
+            "type": 36
+          },
+          {
+            "name": "KeyType",
+            "type": 37
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 35,
+      "type": {
+        "def": {
+          "tuple": [
+            5,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "id": 36,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Message"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "sender",
+                "type": 0,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "content",
+                "type": 3,
+                "typeName": "String"
+              },
+              {
+                "name": "send_at",
+                "type": 21,
+                "typeName": "Timestamp"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 37,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 38
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 38,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 39,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "Lazy"
+        ],
+        "params": [
+          {
+            "name": "V",
+            "type": 5
+          },
+          {
+            "name": "KeyType",
+            "type": 40
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 40,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 41
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 41,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 42,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "Lazy"
+        ],
+        "params": [
+          {
+            "name": "V",
+            "type": 5
+          },
+          {
+            "name": "KeyType",
+            "type": 43
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 43,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 44
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 44,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 45,
+      "type": {
+        "path": [
+          "ink_storage",
+          "lazy",
+          "mapping",
+          "Mapping"
+        ],
+        "params": [
+          {
+            "name": "K",
+            "type": 5
+          },
+          {
+            "name": "V",
+            "type": 5
+          },
+          {
+            "name": "KeyType",
+            "type": 46
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 46,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ResolverKey"
+        ],
+        "params": [
+          {
+            "name": "L",
+            "type": 9
+          },
+          {
+            "name": "R",
+            "type": 47
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 47,
+      "type": {
+        "path": [
+          "ink_storage_traits",
+          "impls",
+          "ManualKey"
+        ],
+        "params": [
+          {
+            "name": "ParentKey",
+            "type": 11
+          }
+        ],
+        "def": {
+          "composite": {}
+        }
+      }
+    },
+    {
+      "id": 48,
+      "type": {
+        "path": [
+          "squidchat",
+          "squidchat",
+          "SquidChat"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "channels",
+                "type": 4,
+                "typeName": "<Mapping<ChannelId, Channel> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<2102459539u32,\n()>,>>::Type"
+              },
+              {
+                "name": "channel_to_members",
+                "type": 13,
+                "typeName": "<Mapping<ChannelId, Vec<AccountId>> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<2342987505u32,\n()>,>>::Type"
+              },
+              {
+                "name": "member_to_channels",
+                "type": 17,
+                "typeName": "<Mapping<AccountId, Vec<ChannelId>> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<2322978209u32,\n()>,>>::Type"
+              },
+              {
+                "name": "requests",
+                "type": 22,
+                "typeName": "<Mapping<RequestId, Request> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<2825076840u32,\n()>,>>::Type"
+              },
+              {
+                "name": "pending_requests",
+                "type": 27,
+                "typeName": "<Mapping<ChannelId, Vec<RequestId>> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<2962065431u32,\n()>,>>::Type"
+              },
+              {
+                "name": "registrant_to_request",
+                "type": 30,
+                "typeName": "<Mapping<(AccountId, ChannelId), RequestId> as::ink::storage::traits\n::AutoStorableHint<::ink::storage::traits::ManualKey<\n2449235927u32, ()>,>>::Type"
+              },
+              {
+                "name": "messages",
+                "type": 34,
+                "typeName": "<Mapping<(ChannelId, MessageId), Message> as::ink::storage::traits\n::AutoStorableHint<::ink::storage::traits::ManualKey<\n2630715550u32, ()>,>>::Type"
+              },
+              {
+                "name": "channel_nonce",
+                "type": 39,
+                "typeName": "<Lazy<u32> as::ink::storage::traits::AutoStorableHint<::ink::\nstorage::traits::ManualKey<4189657426u32, ()>,>>::Type"
+              },
+              {
+                "name": "request_nonce",
+                "type": 42,
+                "typeName": "<Lazy<u32> as::ink::storage::traits::AutoStorableHint<::ink::\nstorage::traits::ManualKey<1929020670u32, ()>,>>::Type"
+              },
+              {
+                "name": "message_nonce",
+                "type": 45,
+                "typeName": "<Mapping<ChannelId, u32> as::ink::storage::traits::\nAutoStorableHint<::ink::storage::traits::ManualKey<4122587098u32,\n()>,>>::Type"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 49,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 11
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 50,
+      "type": {
+        "path": [
+          "ink_primitives",
+          "LangError"
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "CouldNotReadInput",
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 51,
+      "type": {
+        "path": [
+          "Option"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 0
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "None",
+                "index": 0
+              },
+              {
+                "name": "Some",
+                "fields": [
+                  {
+                    "type": 0
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 52,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 53
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 53
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 53,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 54
+          }
+        }
+      }
+    },
+    {
+      "id": 54,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "PendingRequestRecord"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "channel_id",
+                "type": 5,
+                "typeName": "ChannelId"
+              },
+              {
+                "name": "request_id",
+                "type": 5,
+                "typeName": "RequestId"
+              },
+              {
+                "name": "request",
+                "type": 23,
+                "typeName": "Request"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 55,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 56
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 56
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 56,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 5
+          },
+          {
+            "name": "E",
+            "type": 57
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 5
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 57
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 57,
+      "type": {
+        "path": [
+          "squidchat",
+          "errors",
+          "SquidChatError"
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "UnAuthorized",
+                "index": 0
+              },
+              {
+                "name": "Custom",
+                "fields": [
+                  {
+                    "type": 3,
+                    "typeName": "String"
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 58,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 59
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 59
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 59,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 12
+          },
+          {
+            "name": "E",
+            "type": 57
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 57
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 60,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 61
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 61
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 61,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 62
+          }
+        }
+      }
+    },
+    {
+      "id": 62,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "ChannelRecord"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "channel_id",
+                "type": 5,
+                "typeName": "ChannelId"
+              },
+              {
+                "name": "channel",
+                "type": 6,
+                "typeName": "Channel"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 63,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 64
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 64
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 64,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 6
+          },
+          {
+            "name": "E",
+            "type": 57
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 6
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 57
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 65,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 66
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 66
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 66,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Pagination"
+        ],
+        "params": [
+          {
+            "name": "Item",
+            "type": 62
+          }
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "items",
+                "type": 61,
+                "typeName": "Vec<Item>"
+              },
+              {
+                "name": "from",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "per_page",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "has_next_page",
+                "type": 20,
+                "typeName": "bool"
+              },
+              {
+                "name": "total",
+                "type": 5,
+                "typeName": "u32"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 67,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 68
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 68
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 68,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 11
+          },
+          {
+            "name": "E",
+            "type": 57
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 57
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 69,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 70
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 70
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 70,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Pagination"
+        ],
+        "params": [
+          {
+            "name": "Item",
+            "type": 0
+          }
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "items",
+                "type": 12,
+                "typeName": "Vec<Item>"
+              },
+              {
+                "name": "from",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "per_page",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "has_next_page",
+                "type": 20,
+                "typeName": "bool"
+              },
+              {
+                "name": "total",
+                "type": 5,
+                "typeName": "u32"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 71,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 72
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 72
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 72,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Pagination"
+        ],
+        "params": [
+          {
+            "name": "Item",
+            "type": 23
+          }
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "items",
+                "type": 73,
+                "typeName": "Vec<Item>"
+              },
+              {
+                "name": "from",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "per_page",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "has_next_page",
+                "type": 20,
+                "typeName": "bool"
+              },
+              {
+                "name": "total",
+                "type": 5,
+                "typeName": "u32"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 73,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 23
+          }
+        }
+      }
+    },
+    {
+      "id": 74,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 75
+          }
+        }
+      }
+    },
+    {
+      "id": 75,
+      "type": {
+        "def": {
+          "tuple": [
+            0,
+            20
+          ]
+        }
+      }
+    },
+    {
+      "id": 76,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 77
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 77
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 77,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 78
+          },
+          {
+            "name": "E",
+            "type": 57
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 78
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 57
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 78,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "ApprovalSubmissionResult"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "approved",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "rejected",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "not_found",
+                "type": 5,
+                "typeName": "u32"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 79,
+      "type": {
+        "path": [
+          "Result"
+        ],
+        "params": [
+          {
+            "name": "T",
+            "type": 80
+          },
+          {
+            "name": "E",
+            "type": 50
+          }
+        ],
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "name": "Ok",
+                "fields": [
+                  {
+                    "type": 80
+                  }
+                ],
+                "index": 0
+              },
+              {
+                "name": "Err",
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 80,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "Pagination"
+        ],
+        "params": [
+          {
+            "name": "Item",
+            "type": 81
+          }
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "items",
+                "type": 82,
+                "typeName": "Vec<Item>"
+              },
+              {
+                "name": "from",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "per_page",
+                "type": 5,
+                "typeName": "u32"
+              },
+              {
+                "name": "has_next_page",
+                "type": 20,
+                "typeName": "bool"
+              },
+              {
+                "name": "total",
+                "type": 5,
+                "typeName": "u32"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 81,
+      "type": {
+        "path": [
+          "squidchat",
+          "types",
+          "MessageRecord"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "message_id",
+                "type": 5,
+                "typeName": "MessageId"
+              },
+              {
+                "name": "message",
+                "type": 36,
+                "typeName": "Message"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 82,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 81
+          }
+        }
+      }
+    },
+    {
+      "id": 83,
+      "type": {
+        "def": {
+          "primitive": "u128"
+        }
+      }
+    },
+    {
+      "id": 84,
+      "type": {
+        "path": [
+          "ink_primitives",
+          "types",
+          "Hash"
+        ],
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 1,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 85,
+      "type": {
+        "path": [
+          "ink_env",
+          "types",
+          "NoChainExtension"
+        ],
+        "def": {
+          "variant": {}
+        }
+      }
+    }
+  ],
+  "storage": {
+    "root": {
+      "root_key": "0x00000000",
+      "layout": {
+        "struct": {
+          "name": "SquidChat",
+          "fields": [
+            {
+              "name": "channels",
+              "layout": {
+                "root": {
+                  "root_key": "0x93fc507d",
+                  "layout": {
+                    "struct": {
+                      "name": "Channel",
+                      "fields": [
+                        {
+                          "name": "owner",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x93fc507d",
+                              "ty": 0
+                            }
+                          }
+                        },
+                        {
+                          "name": "name",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x93fc507d",
+                              "ty": 3
+                            }
+                          }
+                        },
+                        {
+                          "name": "img_url",
+                          "layout": {
+                            "enum": {
+                              "name": "Option",
+                              "dispatchKey": "0x93fc507d",
+                              "variants": {
+                                "0": {
+                                  "name": "None",
+                                  "fields": []
+                                },
+                                "1": {
+                                  "name": "Some",
+                                  "fields": [
+                                    {
+                                      "name": "0",
+                                      "layout": {
+                                        "leaf": {
+                                          "key": "0x93fc507d",
+                                          "ty": 3
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "ty": 4
+                }
+              }
+            },
+            {
+              "name": "channel_to_members",
+              "layout": {
+                "root": {
+                  "root_key": "0xf126a78b",
+                  "layout": {
+                    "leaf": {
+                      "key": "0xf126a78b",
+                      "ty": 12
+                    }
+                  },
+                  "ty": 13
+                }
+              }
+            },
+            {
+              "name": "member_to_channels",
+              "layout": {
+                "root": {
+                  "root_key": "0xa1d5758a",
+                  "layout": {
+                    "leaf": {
+                      "key": "0xa1d5758a",
+                      "ty": 16
+                    }
+                  },
+                  "ty": 17
+                }
+              }
+            },
+            {
+              "name": "requests",
+              "layout": {
+                "root": {
+                  "root_key": "0x684063a8",
+                  "layout": {
+                    "struct": {
+                      "name": "Request",
+                      "fields": [
+                        {
+                          "name": "sender",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x684063a8",
+                              "ty": 0
+                            }
+                          }
+                        },
+                        {
+                          "name": "channel_id",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x684063a8",
+                              "ty": 5
+                            }
+                          }
+                        },
+                        {
+                          "name": "approval",
+                          "layout": {
+                            "enum": {
+                              "name": "Option",
+                              "dispatchKey": "0x684063a8",
+                              "variants": {
+                                "0": {
+                                  "name": "None",
+                                  "fields": []
+                                },
+                                "1": {
+                                  "name": "Some",
+                                  "fields": [
+                                    {
+                                      "name": "0",
+                                      "layout": {
+                                        "leaf": {
+                                          "key": "0x684063a8",
+                                          "ty": 20
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "name": "requested_at",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x684063a8",
+                              "ty": 21
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "ty": 22
+                }
+              }
+            },
+            {
+              "name": "pending_requests",
+              "layout": {
+                "root": {
+                  "root_key": "0x17888db0",
+                  "layout": {
+                    "leaf": {
+                      "key": "0x17888db0",
+                      "ty": 16
+                    }
+                  },
+                  "ty": 27
+                }
+              }
+            },
+            {
+              "name": "registrant_to_request",
+              "layout": {
+                "root": {
+                  "root_key": "0xd75ffc91",
+                  "layout": {
+                    "leaf": {
+                      "key": "0xd75ffc91",
+                      "ty": 5
+                    }
+                  },
+                  "ty": 30
+                }
+              }
+            },
+            {
+              "name": "messages",
+              "layout": {
+                "root": {
+                  "root_key": "0x9e88cd9c",
+                  "layout": {
+                    "struct": {
+                      "name": "Message",
+                      "fields": [
+                        {
+                          "name": "sender",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x9e88cd9c",
+                              "ty": 0
+                            }
+                          }
+                        },
+                        {
+                          "name": "content",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x9e88cd9c",
+                              "ty": 3
+                            }
+                          }
+                        },
+                        {
+                          "name": "send_at",
+                          "layout": {
+                            "leaf": {
+                              "key": "0x9e88cd9c",
+                              "ty": 21
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "ty": 34
+                }
+              }
+            },
+            {
+              "name": "channel_nonce",
+              "layout": {
+                "root": {
+                  "root_key": "0x5219b9f9",
+                  "layout": {
+                    "leaf": {
+                      "key": "0x5219b9f9",
+                      "ty": 5
+                    }
+                  },
+                  "ty": 39
+                }
+              }
+            },
+            {
+              "name": "request_nonce",
+              "layout": {
+                "root": {
+                  "root_key": "0xfe84fa72",
+                  "layout": {
+                    "leaf": {
+                      "key": "0xfe84fa72",
+                      "ty": 5
+                    }
+                  },
+                  "ty": 42
+                }
+              }
+            },
+            {
+              "name": "message_nonce",
+              "layout": {
+                "root": {
+                  "root_key": "0xdaafb9f5",
+                  "layout": {
+                    "leaf": {
+                      "key": "0xdaafb9f5",
+                      "ty": 5
+                    }
+                  },
+                  "ty": 45
+                }
+              }
+            }
+          ]
+        }
+      },
+      "ty": 48
+    }
+  },
+  "spec": {
+    "constructors": [
+      {
+        "label": "new",
+        "selector": "0x9bae9d5e",
+        "payable": false,
+        "args": [],
+        "returnType": {
+          "type": 49,
+          "displayName": [
+            "ink_primitives",
+            "ConstructorResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      }
+    ],
+    "messages": [
+      {
+        "label": "pending_request_for",
+        "selector": "0xbeabaa89",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "who",
+            "type": {
+              "type": 51,
+              "displayName": [
+                "Option"
+              ]
+            }
+          },
+          {
+            "label": "channel_ids",
+            "type": {
+              "type": 16,
+              "displayName": [
+                "Vec"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 52,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "pending_requests_count",
+        "selector": "0xccbb806f",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 55,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "message_count",
+        "selector": "0x850ee7dc",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 55,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "get_channel_members",
+        "selector": "0xabea8588",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 58,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "get_member_channels",
+        "selector": "0x3ccb7cfd",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "who",
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 60,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "get_channel_info",
+        "selector": "0xbac190b6",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 63,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "list_channels",
+        "selector": "0x591d2907",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "from",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          },
+          {
+            "label": "per_page",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 65,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "new_channel",
+        "selector": "0x5c7ff4a1",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "name",
+            "type": {
+              "type": 3,
+              "displayName": [
+                "String"
+              ]
+            }
+          },
+          {
+            "label": "img_url",
+            "type": {
+              "type": 7,
+              "displayName": [
+                "Option"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 55,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "update_channel",
+        "selector": "0x4c28f0a6",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "name",
+            "type": {
+              "type": 3,
+              "displayName": [
+                "String"
+              ]
+            }
+          },
+          {
+            "label": "img_url",
+            "type": {
+              "type": 7,
+              "displayName": [
+                "Option"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 67,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "list_members",
+        "selector": "0xe9208009",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "from",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          },
+          {
+            "label": "per_page",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 69,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "list_pending_requests",
+        "selector": "0xeda51d58",
+        "mutates": false,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "from",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          },
+          {
+            "label": "per_page",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 71,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "cancel_request",
+        "selector": "0xdab6d4bd",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 67,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "send_request",
+        "selector": "0x67f71055",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 55,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "approve_request",
+        "selector": "0x463a3d58",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "approvals",
+            "type": {
+              "type": 74,
+              "displayName": [
+                "Vec"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 76,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "leave_channel",
+        "selector": "0x5f3dc9ba",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 67,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "kick_member",
+        "selector": "0xa95d714b",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "who",
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            }
+          },
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 67,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "list_messages",
+        "selector": "0x24f7deae",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "from",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          },
+          {
+            "label": "per_page",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "u32"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 79,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "send_message",
+        "selector": "0xafdc403f",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "content",
+            "type": {
+              "type": 3,
+              "displayName": [
+                "String"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 55,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      },
+      {
+        "label": "remove_message",
+        "selector": "0xc78e4564",
+        "mutates": true,
+        "payable": false,
+        "args": [
+          {
+            "label": "channel_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            }
+          },
+          {
+            "label": "message_id",
+            "type": {
+              "type": 5,
+              "displayName": [
+                "MessageId"
+              ]
+            }
+          }
+        ],
+        "returnType": {
+          "type": 67,
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ]
+        },
+        "docs": [],
+        "default": false
+      }
+    ],
+    "events": [
+      {
+        "label": "ChannelCreated",
+        "module_path": "squidchat::events",
+        "signature_topic": "0x26fc0ff4d697e1f1c1bdc77783bd95f72093ee851200b3dd5d99526864cb58a1",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "owner",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "ChannelUpdated",
+        "module_path": "squidchat::events",
+        "signature_topic": "0x77da7011fb252307bcb5b8052fd393176f45f18c95bc0c82cde50e93fef51bda",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "owner",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "MessageSent",
+        "module_path": "squidchat::events",
+        "signature_topic": "0xc80793ded29cad43dc36859556ac43571057d15dccdd7f7f178674f8da3211f8",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "message_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "MessageId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "RequestSent",
+        "module_path": "squidchat::events",
+        "signature_topic": "0x603725ff61bb1882969c519563f5371302165aeb672ceb6a84ea00b204ed9cbd",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "sender",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "RequestCancelled",
+        "module_path": "squidchat::events",
+        "signature_topic": "0x9592099e6b080820b8aafc02157b853cddcdd32ca7fdf126ce0ea384daca25c8",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "sender",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "MessageDeleted",
+        "module_path": "squidchat::events",
+        "signature_topic": "0x192191c238a2a4bff47c910c7ed90757b9ab24ce80b1ca17927dd5c0e410cabd",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "message_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "MessageId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "ApprovalSubmitted",
+        "module_path": "squidchat::events",
+        "signature_topic": "0x88ccce0b286c7bdf7d2133acf29ae3033b15520d18529a022d871c70b4faba3f",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "approved",
+            "indexed": false,
+            "type": {
+              "type": 16,
+              "displayName": [
+                "Vec"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "rejected",
+            "indexed": false,
+            "type": {
+              "type": 16,
+              "displayName": [
+                "Vec"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      },
+      {
+        "label": "MemberLeft",
+        "module_path": "squidchat::events",
+        "signature_topic": "0xccb234234021e85698c08f68868b1cc09615107a3f213800cfe21b204aed9a1b",
+        "args": [
+          {
+            "label": "channel_id",
+            "indexed": false,
+            "type": {
+              "type": 5,
+              "displayName": [
+                "ChannelId"
+              ]
+            },
+            "docs": []
+          },
+          {
+            "label": "account_id",
+            "indexed": false,
+            "type": {
+              "type": 0,
+              "displayName": [
+                "AccountId"
+              ]
+            },
+            "docs": []
+          }
+        ],
+        "docs": []
+      }
+    ],
+    "docs": [],
+    "lang_error": {
+      "type": 50,
+      "displayName": [
+        "ink",
+        "LangError"
+      ]
+    },
+    "environment": {
+      "accountId": {
+        "type": 0,
+        "displayName": [
+          "AccountId"
+        ]
+      },
+      "balance": {
+        "type": 83,
+        "displayName": [
+          "Balance"
+        ]
+      },
+      "hash": {
+        "type": 84,
+        "displayName": [
+          "Hash"
+        ]
+      },
+      "timestamp": {
+        "type": 21,
+        "displayName": [
+          "Timestamp"
+        ]
+      },
+      "blockNumber": {
+        "type": 5,
+        "displayName": [
+          "BlockNumber"
+        ]
+      },
+      "chainExtension": {
+        "type": 85,
+        "displayName": [
+          "ChainExtension"
+        ]
+      },
+      "maxEventTopics": 4,
+      "staticBufferSize": 16384
+    }
+  }
+}
