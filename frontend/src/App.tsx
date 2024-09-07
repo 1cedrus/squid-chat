@@ -27,7 +27,7 @@ function App() {
       >
         {ready &&
           (isConnected ? (
-            <SquidProvider>
+            <SquidProvider key={selectedAccount.address}>
               <Squid />
             </SquidProvider>
           ) : (

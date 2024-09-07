@@ -31,12 +31,15 @@ export default function SquidProvider({ children }: Props) {
   const [selectedChannel, setSelectedChannel] = useState<number>();
   const { contract } = useContract<SquidchatContractApi>(ContractId.SQUIDCHAT);
 
-  const { data: selectedAccountChannels, refresh: rfSelectedAccountChannels, isLoading } =
-    useContractQuery({
-      contract,
-      fn: "getMemberChannels",
-      args: [selectedAccount!.address],
-    });
+  const {
+    data: selectedAccountChannels,
+    refresh: rfSelectedAccountChannels,
+    isLoading,
+  } = useContractQuery({
+    contract,
+    fn: "getMemberChannels",
+    args: [selectedAccount!.address],
+  });
 
   useAsync(async () => {
     if (!selectedAccount || !contract || !client) return;
@@ -45,8 +48,6 @@ export default function SquidProvider({ children }: Props) {
       const channelCreatedEvents =
         contract.events.ChannelCreated.filter(events);
 
-      if (!channelCreatedEvents.length) return;
-
       channelCreatedEvents.forEach(({ data: { owner } }) => {
         owner.address() === selectedAccount.address &&
           rfSelectedAccountChannels();
@@ -54,8 +55,6 @@ export default function SquidProvider({ children }: Props) {
 
       const submittedApprovalEvents =
         contract.events.ApprovalSubmitted.filter(events);
-
-      if (!submittedApprovalEvents.length) return;
 
       // TODO! We should only refresh the channels that the selectedAccount have pending requests
       submittedApprovalEvents.forEach(() => rfSelectedAccountChannels());
@@ -83,7 +82,7 @@ export default function SquidProvider({ children }: Props) {
         selectedChannel,
         selectedAccountChannels,
         rfSelectedAccountChannels,
-        isLoading
+        isLoading,
       }}
     >
       {children}
