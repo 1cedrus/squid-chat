@@ -15,6 +15,7 @@ export interface SquidContextProps {
   setSelectedChannel: (channel: number) => void;
   selectedAccountChannels?: SquidchatChannelRecord[];
   rfSelectedAccountChannels?: () => void;
+  isLoading?: boolean;
 }
 
 export const SquidContext = createContext<SquidContextProps>({
@@ -30,7 +31,7 @@ export default function SquidProvider({ children }: Props) {
   const [selectedChannel, setSelectedChannel] = useState<number>();
   const { contract } = useContract<SquidchatContractApi>(ContractId.SQUIDCHAT);
 
-  const { data: selectedAccountChannels, refresh: rfSelectedAccountChannels } =
+  const { data: selectedAccountChannels, refresh: rfSelectedAccountChannels, isLoading } =
     useContractQuery({
       contract,
       fn: "getMemberChannels",
@@ -82,6 +83,7 @@ export default function SquidProvider({ children }: Props) {
         selectedChannel,
         selectedAccountChannels,
         rfSelectedAccountChannels,
+        isLoading
       }}
     >
       {children}
