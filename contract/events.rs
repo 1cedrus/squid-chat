@@ -1,55 +1,29 @@
 use ink::primitives::AccountId;
-use ink::prelude::vec::Vec;
 
-use crate::{ ChannelId, MessageId, RequestId };
-
-#[ink::event]
-pub struct ChannelCreated {
-  pub channel_id: ChannelId,
-  pub owner: AccountId,
-}
+use crate::{ ChatHash, MessageId };
 
 #[ink::event]
-pub struct ChannelUpdated {
-  pub channel_id: ChannelId,
-  pub owner: AccountId,
+pub struct ChatInitialized {
+  pub chat_hash: ChatHash,
+  pub initializer: AccountId,
+  pub peer: AccountId,
 }
 
 #[ink::event]
 pub struct MessageSent {
-  pub channel_id: ChannelId,
+  pub channel_id: ChatHash,
   pub message_id: MessageId,
 }
 
 #[ink::event]
-pub struct RequestSent {
-  pub channel_id: ChannelId,
-  pub sender: AccountId,
+pub struct Sprayed {
+  pub chat_hash: ChatHash,
+  pub approval: bool,
 }
 
 #[ink::event]
-pub struct RequestCancelled {
-  pub channel_id: ChannelId,
-  pub sender: AccountId,
-}
-
-#[ink::event]
-pub struct MessageDeleted {
-  pub channel_id: ChannelId,
-  pub message_id: MessageId,
-}
-
-#[ink::event]
-pub struct ApprovalSubmitted {
-  pub channel_id: ChannelId,
-  pub approved: Vec<RequestId>,
-  pub rejected: Vec<RequestId>,
-}
-
-#[ink::event]
-// Currently MemberLeft events is used for both MemberLeft and MemberKicked
-pub struct MemberLeft {
-  pub channel_id: ChannelId,
-  pub account_id: AccountId,
+pub struct Broken {
+  pub chat_hash: ChatHash,
+  pub breaker: AccountId,
 }
 
