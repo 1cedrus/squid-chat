@@ -16,14 +16,14 @@ pub struct MessageSent {
 }
 
 #[ink::event]
-pub struct Sprayed {
+pub struct Gripped {
   pub chat_hash: ChatHash,
   pub approval: bool,
 }
 
 #[ink::event]
-pub struct Broken {
+pub struct Sprayed {
   pub chat_hash: ChatHash,
-  pub breaker: AccountId,
+  pub sprayer: AccountId,
 }
 

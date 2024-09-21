@@ -6,13 +6,13 @@ mod types;
 mod macros;
 
 pub use errors::SquidChatError;
-pub use events::{ MessageSent, ChatInitialized, Sprayed, Broken };
-pub use types::{ Message, MessageId, MessageRecord, Pagination, Chat, ChatHash, ChatRecord };
+pub use events::{ MessageSent, ChatInitialized, Sprayed, Gripped };
+pub use types::{ Message, MessageId, MessageRecord, Pagination, Chat, ChatHash, ChatRecord, Profile };
 
 #[ink::contract]
 mod squidchat {
   use core::usize;
-  use crate::{ ensure, Chat, SquidChatError, _blake2x_128, ChatHash, Message, MessageId, MessageRecord, Pagination, ChatRecord, Sprayed, Broken, MessageSent, ChatInitialized }; 
+  use crate::{ ensure, Chat, SquidChatError, _blake2x_128, ChatHash, Message, MessageId, MessageRecord, Pagination, ChatRecord, Sprayed, Gripped, MessageSent, ChatInitialized, Profile }; 
 
   use ink::prelude::string::String;
   use ink::prelude::vec::Vec;
@@ -24,6 +24,7 @@ mod squidchat {
   #[ink(storage)]
   #[derive(Default)]
   pub struct SquidChat {
+    profiles: Mapping<AccountId, Profile>,
     chats: Mapping<ChatHash, Chat>,
     squid_to_chats: Mapping<AccountId, Vec<ChatHash>>,
     messages: Mapping<(ChatHash, MessageId), Message>,
@@ -38,10 +39,20 @@ mod squidchat {
     }
 
     #[ink(message)]
-    pub fn squid(&self) -> Vec<ChatRecord> {
-      let caller_chats = self.squid_to_chats.get(self.env().caller()).unwrap_or_default();
+    pub fn profile(&self, squid: AccountId) -> Option<Profile> {
+      self.profiles.get(squid)
+    }
 
-      caller_chats.iter().map(|chat_hash| {
+    #[ink(message)]
+    pub fn set_profile(&mut self, profile: Profile) {
+      self.profiles.insert(self.env().caller(), &profile);
+    }
+
+    #[ink(message)]
+    pub fn squid(&self, who: Option<AccountId>) -> Vec<ChatRecord> {
+      let squid_chats = self.squid_to_chats.get(who.unwrap_or(self.env().caller())).unwrap_or_default();
+
+      squid_chats.iter().map(|chat_hash| {
         ChatRecord {
           chat_hash: *chat_hash,
           chat: self.chats.get(*chat_hash).unwrap()
@@ -89,43 +100,43 @@ mod squidchat {
     }
 
     #[ink(message)]
-    pub fn break_up(&mut self, chat_hash: ChatHash) -> SquidChatResult<()> {
-      let breaker = self.env().caller();
-      let breaker_chats = self.squid_to_chats.get(breaker).unwrap_or_default();
+    pub fn spray(&mut self, chat_hash: ChatHash) -> SquidChatResult<()> {
+      let sprayer = self.env().caller();
+      let sprayer_chats = self.squid_to_chats.get(sprayer).unwrap_or_default();
 
-      ensure!(breaker_chats.contains(&chat_hash), SquidChatError::Custom(String::from("Chat not existed or breaker not in chat!")));
+      ensure!(sprayer_chats.contains(&chat_hash), SquidChatError::Custom(String::from("Chat not existed or sprayer not in chat!")));
 
       let chat = self.chats.get(chat_hash).unwrap();
       
-      let mut breaker_chats = self.squid_to_chats.get(breaker).unwrap_or_default();
+      let mut sprayer_chats = self.squid_to_chats.get(sprayer).unwrap_or_default();
       let mut peer_chats = self.squid_to_chats.get(chat.peer).unwrap_or_default();
 
-      breaker_chats.retain(|x| *x != chat_hash);
+      sprayer_chats.retain(|x| *x != chat_hash);
       peer_chats.retain(|x| *x != chat_hash);
 
-      self.squid_to_chats.insert(breaker, &breaker_chats);
+      self.squid_to_chats.insert(sprayer, &sprayer_chats);
       self.squid_to_chats.insert(chat.peer, &peer_chats);
 
       // TODO!: Consider to remove chat and messages
 
-      self.env().emit_event(Broken {
+      self.env().emit_event(Sprayed {
         chat_hash,
-        breaker,
+        sprayer,
       });
 
       Ok(())
     }
     
     #[ink(message)]
-    pub fn spray(&mut self, chat_hash: ChatHash, approval: bool) -> SquidChatResult<()> {
-      let sprayer = self.env().caller();
-      let sprayer_chats = self.squid_to_chats.get(sprayer).unwrap_or_default();
+    pub fn gripping(&mut self, chat_hash: ChatHash, approval: bool) -> SquidChatResult<()> {
+      let gripper = self.env().caller();
+      let gripper_chats = self.squid_to_chats.get(gripper).unwrap_or_default();
 
-      ensure!(sprayer_chats.contains(&chat_hash), SquidChatError::Custom(String::from("Chat not existed or breaker not in chat!")));
+      ensure!(gripper_chats.contains(&chat_hash), SquidChatError::Custom(String::from("Chat not existed or breaker not in chat!")));
 
       let mut chat = self.chats.get(chat_hash).unwrap();
 
-      ensure!(chat.peer == sprayer, SquidChatError::Custom(String::from("Only peer can spray!")));
+      ensure!(chat.peer == gripper, SquidChatError::Custom(String::from("Only peer can spray!")));
 
       if approval {
         chat.sprayed = true; 
@@ -133,17 +144,17 @@ mod squidchat {
       } else {
         // TODO!: Consider to remove chat and messages
         
-        let mut sprayer_chats = self.squid_to_chats.get(sprayer).unwrap_or_default();
+        let mut gripper_chats = self.squid_to_chats.get(gripper).unwrap_or_default();
         let mut peer_chats = self.squid_to_chats.get(chat.peer).unwrap_or_default();
 
-        sprayer_chats.retain(|x| *x != chat_hash);
+        gripper_chats.retain(|x| *x != chat_hash);
         peer_chats.retain(|x| *x != chat_hash);
 
-        self.squid_to_chats.insert(sprayer, &sprayer_chats);
+        self.squid_to_chats.insert(gripper, &gripper_chats);
         self.squid_to_chats.insert(chat.peer, &peer_chats);
       }
 
-      self.env().emit_event(Sprayed {
+      self.env().emit_event(Gripped {
         chat_hash,
         approval,
       });

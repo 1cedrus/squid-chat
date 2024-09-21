@@ -49,3 +49,24 @@ pub struct Pagination<Item> {
   pub total: u32,
 }
 
+#[ink::scale_derive(Encode, Decode, TypeInfo)]
+#[cfg_attr(
+  feature = "std",
+  derive(ink::storage::traits::StorageLayout)
+  )]
+pub enum ImageSource {
+  IpfsCid(String),
+  Url(String),
+}
+
+#[ink::scale_derive(Encode, Decode, TypeInfo)]
+#[cfg_attr(
+  feature = "std",
+  derive(ink::storage::traits::StorageLayout)
+  )]
+pub struct Profile {
+  pub username: String,
+  pub avatar: Option<ImageSource>,
+  pub bio: Option<String>,
+}
+
